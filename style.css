@@ -1,0 +1,26 @@
+.tbl {
+    padding: 20px;
+    border: 1px solid black;
+    margin: 0 auto;
+}
+
+.tbody {
+    text-align: center;
+    
+    padding: 5px;
+}
+.input {
+    /* width: 100%; */
+}
+.td {
+    text-align: center;
+}
+
+.button {
+    width: 100%;
+    padding: 0;
+}
+.load{
+    
+}
+
