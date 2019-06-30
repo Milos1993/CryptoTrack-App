@@ -9,84 +9,110 @@ xhr.open("GET", fullUrl);
 	
 xhr.onload  = function() {
 
-	
-	
-
-
-
-
-	var table = document.createElement('table');
-	table.className = 'tbl'
-	var thead = document.createElement('thead');
-	var tbody = document.createElement('tbody');
+	let table = document.createElement('table');
+	table.id = 'myTable';
+	let thead = document.createElement('thead');
+	let tbody = document.createElement('tbody');
 	tbody.className = 'tbody'
 
-	var labels = ["Name", "Short name", "$ Value", "Last 24h", "Amount you own", "$ value of your coin"];
+	let labels = ["Name", "Short name", "$ Value", "Last 24h", "Amount you own", "$ value of your coin"];
 	
-	var theadTr = document.createElement('tr');
-	for (var i = 0; i < labels.length; i++) {
-		var theadTh = document.createElement('th');
+	let theadTr = document.createElement('tr');
+	for (let i = 0; i < labels.length; i++) {
+		let theadTh = document.createElement('th');
 		theadTh.innerHTML = labels[i];
 		theadTr.appendChild(theadTh);
 	}
 	thead.appendChild(theadTr);
 	table.appendChild(thead);
 
-
-	
 	let jsonResponse = JSON.parse(xhr.responseText);
-	
-	var i;
+	let i;
 	
 	
     for(i = 0; i < jsonResponse.data.length; i++) { 
 		const valuta = jsonResponse.data[i];
-		var tbodyTr = document.createElement('tr');
+		let ind = i + 1;
+		let tbodyTr = document.createElement('tr');
 		
-		var tbodyTdName = document.createElement('td');
-		var a =  document.createElement('a');
-		a.setAttribute('href', 'https://sandbox-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?CMC_PRO_API_KEY=a4fc94b7-e321-4c01-882a-bf6bca4217ff');
+		let tbodyTdName = document.createElement('td');
+		let a =  document.createElement('a');
+		a.setAttribute('href', valuta.data);
 		a.className = 'a';
-		tbodyTdName.appendChild(a);
-		
+		tbodyTdName.appendChild(a);	
 		a.innerHTML = valuta.name;
 		tbodyTr.appendChild(tbodyTdName);
+	
 		
-		var tbodyTdSymbol = document.createElement('td');
+		let tbodyTdSymbol = document.createElement('td');
 		tbodyTdSymbol.innerHTML = valuta.symbol;
 		tbodyTr.appendChild(tbodyTdSymbol);
 
 
-		var tbodyTdValue = document.createElement('td');
-		var price = valuta.quote.USD.price;
-		tbodyTdValue.innerHTML = price + " $";
+		let tbodyTdValue = document.createElement('td');
+		let price = valuta.quote.USD.price;
+		price =  (Math.floor(price * 100) / 100);
+		tbodyTdValue.innerHTML =  "$" + price;
+		tbodyTdValue.setAttribute("id", "price" + ind);
 		tbodyTr.appendChild(tbodyTdValue);
 
-		var tbodyTdLast24h = document.createElement('td');
-		var last24h = valuta.quote.USD.percent_change_24h;
-		tbodyTdLast24h.innerHTML = last24h;
+
+		let tbodyTdLast24h = document.createElement('td');
+		let last24h = valuta.quote.USD.percent_change_24h;
+		last24h = (Math.floor(last24h * 100) / 100);
+		tbodyTdLast24h.innerHTML = last24h + ' %';
 		tbodyTr.appendChild(tbodyTdLast24h);
+		
 
-		var tbodyTdAmount = document.createElement('td');
-		var input =  document.createElement('input');
-		input.setAttribute('type', 'text');
-		input.className = 'input';
-		var button = document.createElement('button');
-		button.setAttribute('type', 'submit');
-		button.className = 'button';
-		button.appendChild(document.createTextNode("Submit"));
+		let tbodyTdAmount = document.createElement('td');
+		let input =  document.createElement('input');
+		input.setAttribute("form", "formInput" + ind); 
+		input.setAttribute("id", "formInput" + ind);
+		// input.setAttribute('type', 'text');
+		// input.setAttribute('id', 'txt');
+		// input.setAttribute('onkeyup', 'manage(formInput)');
+		// input.className = 'input';
 		
-		
+		let calc = document.createElement('input');
+		calc.setAttribute("form", "form" + i);
+		calc.setAttribute("type", "submit");
+		calc.setAttribute("value", "Submit");
+		calc.setAttribute("id", ind);
+		// calc.setAttribute('class','btn')	
+		// calc.disabled = true;
+	
+	
+		calc.onclick = function() {
+			let val = document.getElementById("price" + this.getAttribute("id")).innerHTML;
+			val = val.split('$')[1];
+			let amnt = document.getElementById("formInput" + this.getAttribute("id")).value;
+			let tot = val * amnt;
+			let total =  document.getElementById("output" + this.getAttribute("id")).innerHTML = tot;
+			const key2 = 'total';
+			const value2 = total;
+			
+			// console.log(key2);
+			// console.log(value2);
+			
+			if (key2 && value2)  {
+				localStorage.setItem(key2, value2);
+				// location.reload();
+			}
+			total = localStorage.getItem(value2);
+			// document.getElementById("output" + this.getAttribute("id")).innerHTML = localStorage.getItem(key2);
+	
+			console.log(this.getAttribute("id"));
+		}
+			
+	
 		tbodyTdAmount.appendChild(input);
-		tbodyTdAmount.appendChild(button);
-
+		tbodyTdAmount.appendChild(calc);
 		tbodyTr.appendChild(tbodyTdAmount);
 		
-		var tbodyTdCoin = document.createElement('td');
-		var span = document.createElement('span');
-		tbodyTdCoin.appendChild(span);
-		span.appendChild(document.createTextNode("nesto"));
-		tbodyTr.appendChild(tbodyTdCoin);
+		let tbodyTdTotal = document.createElement('td');
+		
+		tbodyTdTotal.setAttribute("id", "output" + ind); 
+		tbodyTr.appendChild(tbodyTdTotal);
 
 
 		
@@ -102,24 +128,94 @@ xhr.onload  = function() {
 			tbodyTr.style.background="white";
 		
 		tbody.appendChild(tbodyTr);
-		
-		
-		
-			
-				
-	};
+					
+	}
 	table.appendChild(tbody);
 	document.getElementById('root').appendChild(table);
-	
-
+		
 };
 
 
-window.onload = function () {
-	document.getElementById('loading').style.display = 'none';
-}
 
-xhr.send();
+// function manage(formInput) {
+		
+// 	let calc = document.getElementById('formInput');
 
-// setTimeout(function () { document.getElementById("tb").contentWindow.location.reload(true); }, 10000, alert("cao"));
+// if (formInput.value != '') {
+// 	calc.disabled = false;
+// 	if (event.keyCode === 13) {
+// 		event.preventDefault();
+// 		document. document.querySelectorAll('formInput').click();
+// 	   }
+// }
+// else {
+// 	calc.disabled = true;
+// }	
+
+// }
+class Loader {
+	static css(url) {
+	  return new Promise((resolve, reject) => {
+		this._load("link", url, resolve, reject);
+	  });
+	}
+  
+	static js(url) {
+	  return new Promise((resolve, reject) => {
+		this._load("script", url, resolve, reject);
+	  });
+	}
+  
+	static _load(tag, url, resolve, reject) {
+	  let element = document.createElement(tag);
+	  let attr;
+	  let parent;
+  
+	  // resolve and reject for the promise
+	  element.addEventListener("load", () => {
+		resolve(url);
+	  });
+	  element.addEventListener("error", () => {
+		reject(url);
+	  });
+  
+	  // set different attributes depending on tag type
+	  switch (tag) {
+		case "script":
+		  parent = "body";
+		  attr = "src";
+		  element.async = false;
+		  break;
+		case "link":
+		  parent = "head";
+		  attr = "href";
+		  element.type = "text/css";
+		  element.rel = "stylesheet";
+		  break;
+		default:
+		  throw new Error("Unsupported tag.");
+	  }
+  
+	  // set the url for the element
+	  element[attr] = url;
+  
+	  // initiate the loading of the element
+	  document[parent].appendChild(element);
+	}
+  }
+  
+  
+  Promise.all([
+	Loader.css("https://rawgit.com/CodeSeven/toastr/master/build/toastr.min.css"),
+	Loader.js("https://code.jquery.com/jquery-3.3.1.min.js"),
+	Loader.js("https://rawgit.com/CodeSeven/toastr/master/build/toastr.min.js")
+  ])
+	.then(messages => {
+	  console.log("Resolved!", messages);
+	  toastr.info("Loading");
+	})
+	.catch(error => {
+	  console.error("Rejected!", error);
+	});
 			
+	xhr.send();
