@@ -9,7 +9,6 @@ xhr.open("GET", fullUrl);
 	
 xhr.onload  = function() {
 
-
 	let table = document.createElement('table');
 	table.id = 'myTable';
 	let thead = document.createElement('thead');
@@ -27,8 +26,6 @@ xhr.onload  = function() {
 	thead.appendChild(theadTr);
 	table.appendChild(thead);
 
-
-	
 	let jsonResponse = JSON.parse(xhr.responseText);
 	
 	let i;
@@ -44,10 +41,10 @@ xhr.onload  = function() {
 		let a =  document.createElement('a');
 		a.setAttribute('href', 'https://sandbox-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?CMC_PRO_API_KEY=a4fc94b7-e321-4c01-882a-bf6bca4217ff');
 		a.className = 'a';
-		tbodyTdName.appendChild(a);
-		
+		tbodyTdName.appendChild(a);	
 		a.innerHTML = valuta.name;
 		tbodyTr.appendChild(tbodyTdName);
+	
 		
 		let tbodyTdSymbol = document.createElement('td');
 		tbodyTdSymbol.innerHTML = valuta.symbol;
@@ -74,6 +71,9 @@ xhr.onload  = function() {
 		input.setAttribute("id", "formInput" + ind);
 		input.setAttribute('class', 'amountof')
 		
+
+		
+	
 		
 		let calc = document.createElement('input');
 		calc.setAttribute("form", "form" + i);
@@ -89,7 +89,7 @@ xhr.onload  = function() {
 		tbodyTr.appendChild(tbodyTdAmount);
 		
 		let tbodyTdTotal = document.createElement('td');
-		tbodyTdTotal.setAttribute("id", "output" + ind); // ovaj id mi treba da bi ovo polje setovao na vrednost kolicina * vrednost
+		tbodyTdTotal.setAttribute("id", "output" + ind); 
 		tbodyTr.appendChild(tbodyTdTotal);
 		input.onchange = function() {
 			console.log(this.value);
@@ -187,3 +187,4 @@ window.onload = function () {
 }
 setTimeout(function () { document.getElementById("tb").contentWindow.location.reload(true); }, 10000);
 			
+	
