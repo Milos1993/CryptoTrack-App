@@ -1,0 +1,64 @@
+
+  #loading {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(192, 192, 192, 0.5);
+    background-image: url("https://i.stack.imgur.com/MnyxU.gif");
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  #myTable {
+    padding: 30px;
+    border: 1px solid black;
+    margin: 0 auto;
+    align-content: center;
+    width: 70%;
+} 
+
+.tbody {
+    text-align: center;
+    margin: 10px;
+    padding: 10px;
+}
+.amountof {
+    border: gray;
+}
+td {
+    text-align: center;
+    padding: 3px;
+    margin: 3px;
+}
+
+.btn {
+    width: 80%;
+    padding: 0;
+    font-size: 17px;
+}
+td > a{
+    text-decoration: none;
+    color: black;
+   
+}
+td > a:hover{
+    text-decoration: underline;
+}
+
+th {
+    padding: 10px;
+    margin: 5px;
+    font-size: 20px;
+}
+h1{
+    text-align: center;
+    margin-bottom: 50px;
+    margin-top: 50px;
+    font-size: 90px;
+}
+
+
