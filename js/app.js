@@ -5,9 +5,12 @@ const apiKey = 'a4fc94b7-e321-4c01-882a-bf6bca4217ff';
 const fullUrl = proxy + url + apiKey;
 
 
-xhr.open("GET", fullUrl);
 
-xhr.onload = function () {
+
+function getData() {
+	let oldTable = document.getElementById('root');
+	if(oldTable != null)
+		oldTable.innerHTML = "";
 
 	let table = document.createElement('table');
 	table.id = 'myTable';
@@ -41,7 +44,7 @@ xhr.onload = function () {
 
 		let tbodyTdName = document.createElement('td');
 		let a = document.createElement('a');
-		a.setAttribute('href', 'https://sandbox-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?CMC_PRO_API_KEY=a4fc94b7-e321-4c01-882a-bf6bca4217ff');
+		a.setAttribute('href', fullUrl);
 		a.className = 'a';
 		tbodyTdName.appendChild(a);
 		a.innerHTML = valuta.name;
@@ -153,32 +156,56 @@ xhr.onload = function () {
 
 	let numinput = document.querySelectorAll('.amountof');
 
-	numinput.forEach(function (input) {
+		numinput.forEach(function (input) {
 
 		input.addEventListener('keyup', manage);
 
 	})
 
-	function manage(event) {
-
+	function manage() {
+	
 		if (this.value != '') {
 
 			let id = this.getAttribute('id');
 			
-			let idnum = id.substr(id.length - 1);
+			let idnum = id.substr(id.length -1);
 
 			let button = document.getElementById(idnum);
-			console.log(button);
+			
 			button.removeAttribute('disabled');
-
+			console.log(button);
 		}
 
 	}
-
 };
 
 
+	xhr.open("GET", fullUrl);
+	xhr.onload = function () {
+	getData();
+}
+
 xhr.send();
+
+	// refresh data from API every 60 seconds
+
+function refresh() {
+	let xhr = new XMLHttpRequest();
+	let proxy = 'https://cors-anywhere.herokuapp.com/';
+	let url = 'https://sandbox-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?CMC_PRO_API_KEY=';
+	let apiKey = 'a4fc94b7-e321-4c01-882a-bf6bca4217ff';
+	let fullUrl = proxy + url + apiKey;
+
+	xhr.open("GET", fullUrl);
+	xhr.send();
+	console.log('Proba');
+	getData();
+	setTimeout(refresh, 60000);
+	
+}
+
+setTimeout(refresh, 60000);
+
 
 function onReady(callback) {
 	let intervalId = window.setInterval(function() {
